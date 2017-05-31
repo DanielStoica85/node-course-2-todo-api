@@ -1,0 +1,19 @@
+{
+  "name": "node-todo-api",
+  "version": "1.0.0",
+  "description": "Node ToDo API with MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "mongodb",
+    "udemy"
+  ],
+  "author": "Daniel Stoica",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^2.2.27"
+  }
+}
