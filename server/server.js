@@ -36,6 +36,13 @@ app.get('/todos', (req, res) => {
 });
 
 app.get('/todos/:id', (req, res) => {
+	
+	// validate id, if not respond with 404 and empty body
+		// findById 
+			// success - if todo - send it back
+			// if no todo - send 404 with empty body
+			// error - 400 with empty body
+
 	var id = req.params.id;
 
 	if (!ObjectID.isValid(id)) {
@@ -54,13 +61,7 @@ app.get('/todos/:id', (req, res) => {
 		}
 	)};
 
-	// validate id, if not respond with 404 and empty body
-	// findById 
-		// success - if todo - send it back
-		// if no todo - send 404 with empty body
-		// error - 400 with empty body
-
-})
+});
 
 app.listen(3000, () => {
 	console.log('Started on port 3000.');
