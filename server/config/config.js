@@ -1,3 +1,5 @@
+// all of this is ignored by heroku, where env = 'production'
+
 var env = process.env.NODE_ENV || 'development';
 
 if (env === 'development') {
