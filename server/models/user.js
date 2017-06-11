@@ -95,6 +95,8 @@ UserSchema.statics.findByToken = function(token) {
 	});
 };
 
+// mongoose middleware to be run before user save takes place
+// if password was modified, hashit and save it
 UserSchema.pre('save', function(next) {
 	var user = this;
 
