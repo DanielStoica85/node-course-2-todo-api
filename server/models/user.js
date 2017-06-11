@@ -95,6 +95,28 @@ UserSchema.statics.findByToken = function(token) {
 	});
 };
 
+// model method to find by credentials
+UserSchema.statics.findByCredentials = function(email, password) {
+	var User = this;
+
+	return User.findOne({email: email}).then((user) => {
+		if (!user) {
+			return Promise.reject();
+		}
+
+		return new Promise((resolve, reject) => {
+			bcrypt.compare(password, user.password, (err, res) => {
+				if (!res) {
+					reject();
+				}
+				else {
+					resolve(user);
+				}
+			});
+		});
+	});
+};
+
 // mongoose middleware to be run before user save takes place
 // if password was modified, hashit and save it
 UserSchema.pre('save', function(next) {
