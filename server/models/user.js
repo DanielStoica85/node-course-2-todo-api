@@ -46,24 +46,30 @@ var UserSchema = new mongoose.Schema({
 	}]
 });
 
+// override method to decide what gets returned when mongoose model is JSONed
+// this method is automatically called by res.send()
 UserSchema.methods.toJSON = function() {
 	var user = this;
+	// from mongoose model to object
 	var userObject = user.toObject();
 
 	return _.pick(userObject, ['_id', 'email']);
 }
 
-// add an INSTANCE method
+// add an INSTANCE method for creating a token and adding it to the user
 UserSchema.methods.generateAuthToken = function() {
 	var user = this;
 	var access = 'auth';
+	// generate token by using: 1. object to be signed 2. secret value
 	var token = jwt.sign({_id: user._id.toHexString(), access: access}, 'abc123').toString();
-
+	// add access and newly generated token to tokens array of user
 	user.tokens.push({
 		access: access,
 		token: token
 	})
 
+	// instead of Promise chained to a Promise, we just return the token
+	// will chain to this when calling method in server.js
 	return user.save().then(() => {
 		return token;
 	});
@@ -74,14 +80,14 @@ UserSchema.statics.findByToken = function(token) {
 	var User = this;
 	var decoded;
 
+	// use try.catch because jwt.verify returns errors if something is incorrect
 	try {
 		decoded = jwt.verify(token, 'abc123');
 	} catch (e) {
-		return new Promise((resolve, reject) => {
-			reject();
-		});
+		return Promise.reject();
 	}
 
+	// use return because it is a promise and we will chain to it
 	return User.findOne({
 		_id: decoded._id,
 		'tokens.token': token,

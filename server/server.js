@@ -122,9 +122,11 @@ app.patch('/todos/:id', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
+	// create new user in db with only email and password
 	var body = _.pick(req.body, ['email', 'password']);
 	var user = new User(body);
 
+	// save user, generate token, save user with token, return user with token as header
 	user.save().then(() => {
 		return user.generateAuthToken();
 	}).then((token) => {
